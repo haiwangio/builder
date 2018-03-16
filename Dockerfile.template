@@ -1,6 +1,12 @@
 FROM  ubuntu:%VERSION%
 ENV container docker
 RUN sed -i 's/.*deb\(.*http:\/\/\)archive.ubuntu/deb\1mirrors.163/g' /etc/apt/sources.list
+RUN sed -i 's/security.ubuntu.com\/ubuntu\//mirrors.aliyun.com\/ubuntu\//g' /etc/apt/sources.list
+RUN mkdir -p /root/.pip/
+RUN echo [global] > ~/.pip/pip.conf
+RUN echo index-url = http://mirrors.aliyun.com/pypi/simple/ >> ~/.pip/pip.conf
+RUN echo [install]  >> ~/.pip/pip.conf
+
 STOPSIGNAL 37
 RUN find /etc/systemd/system \
          /lib/systemd/system \
@@ -75,6 +81,9 @@ RUN echo deb http://ppa.launchpad.net/ionel-mc/socat/ubuntu xenial main > /etc/a
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 88E048443558A630
 RUN   apt-get update \
  && apt-get install -y --no-install-recommends docker-ce socat=1.7.3.1-1ionelmc1~ppa1 
+#start desktop
+RUN apt-get install -y x11vnc xvfb  lxde
+#end desktop
 ENV TERM=xterm
 RUN dpkg-reconfigure locales
 RUN locale-gen  zh_CN.UTF-8
@@ -87,11 +96,16 @@ RUN ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN apt-get install -y systemd
 RUN systemctl set-default multi-user.target
 RUN mkdir /var/run/sshd  
-RUN echo 'root:root' | chpasswd
+RUN echo 'root:netboylove88' | chpasswd
 RUN sed -ri 's/^#PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 #VOLUME ["/sys/fs/cgroup"]
 ENV DEBIAN_FRONTEND="noninteractive"
+RUN apt-get install  -y sudo
+RUN sed -i 's/Type=notify/Type=notify\r\nEnvironment=\"HTTP_PROXY=115.126.86.49:808\"\r\nEnvironment=\"HTTPS_PROXY=115.126.86.49:808\"\r\nEnvironmentFile=-\/etc\/default\/docker/g' /lib/systemd/system/docker.service
+RUN  sudo echo "DOCKER_OPTS=\"--registry-mirror=http://hub-mirror.c.163.com\"" >> /etc/default/docker
+
+
 CMD ["/bin/bash", "-c", "exec /sbin/init --log-target=journal 3>&1"]
 
 
