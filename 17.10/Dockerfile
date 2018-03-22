@@ -140,7 +140,7 @@ RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3 && \
     echo 'source /etc/profile.d/rvm.sh' >> /etc/profile && \
     /bin/bash -l -c "rvm requirements;" && \
     rvm install %ruby-version% && \
-    /bin/bash -l -c "rvm use --default %ruby_version% && \
+    /bin/bash -l -c "rvm use --default 2.1.0 && \
     gem install bundler"
 RUN gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org
 RUN gem -v
@@ -148,10 +148,10 @@ RUN gem -v
 #start node
 
 ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION %NODE_VERSION%
+ENV NODE_VERSION 9
 
 # Install nvm with node and npm
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/%NVM_VERSION%/install.sh | bash
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
 RUN source $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \

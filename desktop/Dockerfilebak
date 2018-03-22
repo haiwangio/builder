@@ -1,0 +1,52 @@
+FROM haiwangio/systemd
+
+RUN	apt-get update
+
+RUN apt-get install -y tzdata locate  locales 
+
+ENV TERM=xterm
+ENV DEBIAN_FRONTEND noninteractive
+RUN dpkg-reconfigure locales
+RUN locale-gen  zh_CN.UTF-8
+ENV  LANG zh_CN.UTF-8
+ENV  LANGUAGE zh_CN:zh
+ENV LC_ALL zh_CN.UTF-8
+ENV container docker
+#RUN apt-get install systemd -y && apt-get clean all
+#RUN rm -f /lib/systemd/system/multi-user.target.wants/* && \
+#rm -f /etc/systemd/system/*.wants/* && \
+#rm -f /lib/systemd/system/local-fs.target.wants/* && \
+#rm -f /lib/systemd/system/sockets.target.wants/*udev* && \ 
+#rm -f /lib/systemd/system/sockets.target.wants/*initctl* && \ 
+#rm -f /lib/systemd/system/basic.target.wants/*
+#RUN apt-get install autofs -y
+VOLUME ["/sys/fs/cgroup"]
+# Install LXDE VNC XRDP Chrome __________________________
+RUN \
+	apt-get update && \
+	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+	lubuntu-desktop 
+RUN   apt-get install -y \
+xrdp \
+	chromium-browser \
+	htop
+
+	
+# .xsession __________________________
+RUN \
+	echo lxsession -s Lubuntu -e LXDE > /root/.xsession 
+#	rm -f /run/xrdp/xrdp.pid && \
+#	rm -f /var/run/xrdp/xrdp-sesman.pid
+	 
+
+	
+# VNC setting __________________________
+ENV	USER	root
+
+#RUN \
+#	mkdir /root/.vnc && \
+#	echo "12345678" | vncpasswd -f > /root/.vnc/passwd && \
+#	chmod 600 /root/.vnc/passwd
+RUN apt-get install -y openssh-server
+EXPOSE 3389
+#ENTRYPOINT /etc/init.d/xrdp start && tail -F /var/log/xrdp-sesman.log

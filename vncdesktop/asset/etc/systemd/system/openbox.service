@@ -1,0 +1,14 @@
+[Unit]
+Description=Start  openbox startup.
+After=multi-user.target
+
+[Service]
+Type=simple
+Environment=DISPLAY=:1
+Environment=HOME=/root
+Environment=USER=root
+ExecStart=/usr/bin/openbox
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

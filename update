@@ -1,8 +1,13 @@
 #!/bin/bash
 set -e
-
-for v in */; do
-  v="${v%/}"
-  sed "s/%VERSION%/$v/g" Dockerfile.template > "$v/Dockerfile"
-  docker build -t builder $v 
-done
+ruby_version="2.1.0"
+NODE_VERSION="9"
+NVM_VERSION="v0.33.8"
+v="17.10"
+mkdir -p  $v
+cp Dockerfile.template $v/Dockerfile
+sed -i "s/%VERSION%/$v/g" Dockerfile.template  $v/Dockerfile
+sed -i "s/%ruby_version%/${ruby_version}/g" $v/Dockerfile  $v/Dockerfile
+sed -i  "s/%NODE_VERSION%/${NODE_VERSION}/g" $v/Dockerfile  $v/Dockerfile
+sed -i "s/%NVM_VERSION%/${NVM_VERSION}/g" $v/Dockerfile  $v/Dockerfile
+docker build -t builder $v 

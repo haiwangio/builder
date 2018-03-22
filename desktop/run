@@ -1,0 +1,10 @@
+#!/bin/bash
+docker rm -f haiwangdesktop
+  docker run  -d --name=haiwangdesktop \
+             -p 13389:3389 \
+            --privileged \
+            --security-opt seccomp=unconfined \
+            --tmpfs /run \
+            --tmpfs /run/lock \
+            --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
+             haiwangio/desktop

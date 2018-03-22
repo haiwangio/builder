@@ -1,0 +1,14 @@
+[Unit]
+Description=Start  lxpanel startup.
+After=multi-user.target
+
+[Service]
+Type=simple
+Environment=DISPLAY=:1
+Environment=HOME=/root
+Environment=USER=root
+ExecStart=/usr/bin/lxpanel --profile LXDE
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

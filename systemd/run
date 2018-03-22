@@ -1,0 +1,8 @@
+#!/bin/bash
+  docker run  -d --name=haiwangsystemd \
+            --privileged \
+            --security-opt seccomp=unconfined \
+            --tmpfs /run \
+            --tmpfs /run/lock \
+            --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
+             haiwangio/systemd

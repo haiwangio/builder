@@ -1,0 +1,10 @@
+[Unit]
+Description=Start novnc at startup.
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/web/run.py 2>&1 
+
+[Install]
+WantedBy=multi-user.target

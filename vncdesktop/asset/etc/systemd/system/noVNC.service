@@ -1,0 +1,10 @@
+[Unit]
+Description=Start novnc at startup.
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/noVNC/utils/launch.sh --listen 6081
+
+[Install]
+WantedBy=multi-user.target

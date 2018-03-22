@@ -1,0 +1,13 @@
+[Unit]
+Description=Start  pcmanfm startup.
+After=multi-user.target
+
+[Service]
+Type=simple
+Environment=DISPLAY=:1
+Environment=HOME=/root
+Environment=USER=root
+ExecStart=/usr/bin/pcmanfm --desktop --profile LXDE
+Restart=always
+[Install]
+WantedBy=multi-user.target

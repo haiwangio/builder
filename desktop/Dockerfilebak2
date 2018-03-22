@@ -1,0 +1,24 @@
+FROM haiwangio/systemd
+RUN	apt-get update
+RUN apt-get install -y tzdata locate  locales 
+ENV TERM=xterm
+ENV DEBIAN_FRONTEND noninteractive
+RUN dpkg-reconfigure locales
+RUN locale-gen  zh_CN.UTF-8
+ENV  LANG zh_CN.UTF-8
+ENV  LANGUAGE zh_CN:zh
+ENV LC_ALL zh_CN.UTF-8
+ENV container docker
+VOLUME ["/sys/fs/cgroup"]
+RUN apt-get update  ; \
+	 apt-get install -y iptables ca-certificates lxc lxde xrdp language-pack-zh-hant language-pack-zh-hans  && apt-get clean; \
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN rm -f /etc/localtime
+RUN ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN     echo 'root:root@root' |chpasswd
+RUN	useradd -ms /bin/bash user && \
+	echo 'user:password' |chpasswd
+RUN echo 'LANG="zh_CN.UTF-8"'  >> /etc/default/locale
+RUN echo 'LANGUAGE="zh_CN:zh"' >> /etc/default/locale
+EXPOSE 3389
+#ENTRYPOINT /etc/init.d/xrdp start && tail -F /var/log/xrdp-sesman.log

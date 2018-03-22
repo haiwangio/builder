@@ -1,0 +1,12 @@
+#!/bin/bash
+docker rm -f haiwangvncdesktop
+  docker run  -d --name=haiwangvncdesktop \
+             -p 3389:3389 \
+             -p 6080:80 \
+             -p 5900:5900 \
+            --privileged \
+            --security-opt seccomp=unconfined \
+            --tmpfs /run \
+            --tmpfs /run/lock \
+            --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
+             haiwangio/vncdesktop
